@@ -1,4 +1,4 @@
-# posAppMy
+# PosAppMy
 
 posAppMy is a Home Test Automation Assessment:. This project is built using Maven and provides Useing automation tools Selenium and java to create a test
 automation using TestNg for reporting.
