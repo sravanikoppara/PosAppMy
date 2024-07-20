@@ -8,15 +8,11 @@ import org.testng.annotations.Test;
 
 import enums.Browser;
 import factory.BrowserProvider;
+import net.bytebuddy.build.Plugin.Factory.UsingReflection.Priority;
 import pages.GoogleHomePage;
 
 public class GoogleSearchTests {
 	private WebDriver driver;
-	private GoogleHomePage googleHomePage;
-	/*public GoogleHomePage(WebDriver driver) {
-		super(driver);
-		this.driver = driver;
-	}*/
 
 	/**
 	 * This method will be executed before the test start.
@@ -25,25 +21,29 @@ public class GoogleSearchTests {
 	public void initalize() {
 		driver = BrowserProvider.createDriver(Browser.CHROME);
 		driver.manage().window().maximize();
+		//driver.get("https://www.pos.com.my/");
 		
 	}
-	@BeforeTest
+/*	@BeforeTest
 	public void launch() {
     driver.get("https://www.pos.com.my/");
 		// Initialize the GoogleHomePage object
 		//GoogleHomePage googleHomePage = new GoogleHomePage(driver);	
-	}
+	}*/
 	/**
 	 * This method perform a google search test. We can have multiple @Test methods inside this class.
 	 */
-	@Test 
+	@Test
 	public void googleSearchTest() {
 
 		GoogleHomePage googleHomePage = new GoogleHomePage(driver);
+		driver.get("https://www.pos.com.my/");
 		googleHomePage.searchFor();	
+		googleHomePage.buyInsure();
 		
 	}
-	@Test 
+	
+	@Test (dependsOnMethods = "googleSearchTest") 
 	public void createShipment() {
 		GoogleHomePage googleHomePage = new GoogleHomePage(driver);
 		googleHomePage.testMenuClick();	

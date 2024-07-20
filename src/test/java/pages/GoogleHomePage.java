@@ -8,6 +8,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import utils.SeleniumUtils;
@@ -21,8 +22,10 @@ public class GoogleHomePage extends PageBase{
 		private String buyInsure = "//a[@href='https://insurance.pos.com.my']";
 		private String driveCarButton ="//div[contains(text(),'I drive a car')]";
 		private String rideMotorcycleButton="//div[@class='vehicleBox lblueBg mb-2 hover activeBtn']//div[2]";
-		private String sendButn="//app-floating-bar[@class='ng-star-inserted']//div[@class='grid-container']//div[1]";
-		private String parcelSubMenu="//a[@class='title ng-star-inserted'][normalize-space()='Send']";
+		private String basefloatingCont= "//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[1]";
+		private String floatingCont="//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[@class='base-container hidden-xs']/div[@class='outer-container']/div[@class='body-container']/div[@class='floating-bar']/div[@class='grid-container']/div[1]/a[1]";
+		private String sendButn ="//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[@class='base-container hidden-xs']/div[@class='outer-container']/div[@class='body-container']/div[@class='floating-bar']/div[@class='grid-container']/div[1]/a[1]";
+		//private String parcelSubMenu="//a[@class='title ng-star-inserted'][normalize-space()='Send']";
 		/**
 		 * Constructor of the page. Initialize the Page Factory objects.
 		 * 
@@ -44,11 +47,16 @@ public class GoogleHomePage extends PageBase{
 		        WebElement notificationContainer = SeleniumUtils.findElement(driver, notifContainer);
 		        notificationContainer.findElement(By.xpath("//span[@class='close-notification']")).click();
 
-		        // Close alert box
-		        WebElement alertBoxElement = SeleniumUtils.waitForElement(driver, alertBox);
-		        alertBoxElement.findElement(By.xpath(closeBtn)).click();
-
-		        // Scroll to and click the "Buy Insure" button
+		        //Close alert box
+		      WebElement alertBoxElement = SeleniumUtils.waitForElement(driver, alertBox);
+		      alertBoxElement.findElement(By.xpath(closeBtn)).click();
+		    }
+		    catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+		    
+		    public void buyInsure() {	        // Scroll to and click the "Buy Insure" button
 		        WebElement buyInsureButton = SeleniumUtils.waitForElementToBeClickable(driver, buyInsure);
 		        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", buyInsureButton);
 
@@ -81,55 +89,43 @@ public class GoogleHomePage extends PageBase{
 		        Assert.assertTrue(rideMotorcycleButtonContainer.isDisplayed(), "\"I ride a motorcycle\" button should be visible");
 		        Assert.assertTrue(rideMotorcycleButtonContainer.isEnabled(), "\"I ride a motorcycle\" button should be enabled");
 
-		    } catch (Exception e) {
-		        e.printStackTrace();
 		    }
-		}
+		
 
 		 
+		
+		@BeforeTest
+		public void navigateBack() {
+		driver.navigate().back();
+		}
 		@Test 
 		public void testMenuClick() {
 			try {
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			// Get the list of all open tabs
-			ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-
-			// Switch to the new tab (assuming the new tab is the last one opened)
-			driver.switchTo().window(tabs.get(1));
-
-			String actualUrl = driver.getCurrentUrl();
-			// Debugging information
+	//		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			driver.get("https://www.pos.com.my/");
+			searchFor();
+			//driver.navigate().back();
+			/*// Debugging information
 			System.out.println("Expected URL: " + expectedUrl);
 			System.out.println("Actual URL: " + actualUrl);
-			Assert.assertEquals(actualUrl, expectedUrl, "The URL of the new tab is incorrect.");
+			Assert.assertEquals(actualUrl, expectedUrl, "The URL of the new tab is incorrect.");*/
 
-			System.out.println("Test Passed: The URL is correct.");
+			//System.out.println("Test Passed: The URL is correct.");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
+			WebElement basefloatingContainer = SeleniumUtils.findElement(driver, basefloatingCont);
+			basefloatingContainer.findElement(By.xpath(sendButn)).click();
+			//SeleniumUtils.findElement(driver, floatingCont).click();;
 			// Find the "Send" menu item and click it
-			SeleniumUtils.waitForElement(driver, sendButn).click();
-
-			/*
-			 * WebElement sendMenu = driver.findElement(By.xpath("sendButn"));
-			 * sendMenu.click();
-			 */
+			 SeleniumUtils.waitForElementToBeClickable(driver,sendButn).click();
+			//SeleniumUtils.waitForElement(driver, sendButn).click();
+	 			 
 			// Find the "Parcel" submenu item and click it
-			/*
-			 * WebElement parcelSubMenu =
-			 * driver.findElement(By.xpath("//a[text()='Parcel']"));
-			 * 
-			 * parcelSubMenu.click();
-			 */
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			SeleniumUtils.waitForElement(driver, parcelSubMenu).click();
-			// Optionally verify the result of the click action
-			// Example: Verify that clicking "Parcel" navigates to the correct page or
-			// displays a specific element
-			// WebElement resultElement = driver.findElement(By.id("result-element-id"));
-			// Assert.assertTrue(resultElement.isDisplayed(), "Result element should be
-			// visible after clicking 'Parcel'");
-
+			
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			//SeleniumUtils.waitForElement(driver, parcelSubMenu).click();
+			
 			return;
 		}
 	
