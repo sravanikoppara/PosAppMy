@@ -34,7 +34,7 @@ public class GoogleSearchTests {
 	 * This method perform a google search test. We can have multiple @Test methods inside this class.
 	 */
 	@Test
-	public void googleSearchTest() {
+	public void posOffersBuyInsurance() {
 
 		GoogleHomePage googleHomePage = new GoogleHomePage(driver);
 		driver.get("https://www.pos.com.my/");
@@ -43,7 +43,7 @@ public class GoogleSearchTests {
 		
 	}
 	
-	@Test (dependsOnMethods = "googleSearchTest") 
+	@Test (dependsOnMethods = "posOffersBuyInsurance") 
 	public void createShipment() {
 		GoogleHomePage googleHomePage = new GoogleHomePage(driver);
 		googleHomePage.testMenuClick();	

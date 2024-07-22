@@ -72,7 +72,7 @@ public class GoogleHomePage extends PageBase{
 		        try {
 		            buyInsureButton.click();
 		        } catch (Exception e) {
-		            System.out.println("Click using WebDriver failed, attempting JavaScript click.");
+		          //  System.out.println("Click using WebDriver failed, attempting JavaScript click.");
 		            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", buyInsureButton);
 		        }
 
