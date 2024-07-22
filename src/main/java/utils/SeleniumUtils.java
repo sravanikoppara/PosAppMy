@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -208,4 +210,31 @@ private static final int DEFAULT_WAIT_TIME = 10;
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		return wait.until(condition);
 	}
+	
+	 // Method to scroll to an element and click it
+	public static WebElement scrollToElementAndClick(WebDriver driver, String xpath, int timeOutInSeconds) {
+    //public <T> T scrollToElementAndClick(WebDriver driver,  Function<? super WebDriver, T> condition, int timeOutInSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            element.click();
+            System.out.println("Clicked the element: " + xpath);
+        } catch (NoSuchElementException e) {
+            System.out.println("Element not found: " + xpath);
+       
+        }
+		return null;
+	}
+	
+	// Method to check if an element is displayed
+    public static boolean isElementDisplayed(WebDriver driver, String xpath) {
+        try {
+            WebElement element = driver.findElement(By.xpath(xpath));
+            return element.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 }
+

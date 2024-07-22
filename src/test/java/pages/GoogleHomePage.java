@@ -5,14 +5,19 @@ import java.util.ArrayList;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import utils.SeleniumUtils;
+import zmq.util.Utils;
 
+@Test
 public class GoogleHomePage extends PageBase{
 		private WebDriver driver;
 		private String alertBox = "//mat-dialog-container[@id='mat-mdc-dialog-3']"; //"//div[@id='cdk-overlay-3']";
@@ -22,10 +27,14 @@ public class GoogleHomePage extends PageBase{
 		private String buyInsure = "//a[@href='https://insurance.pos.com.my']";
 		private String driveCarButton ="//div[contains(text(),'I drive a car')]";
 		private String rideMotorcycleButton="//div[@class='vehicleBox lblueBg mb-2 hover activeBtn']//div[2]";
-		private String basefloatingCont= "//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[1]";
-		private String floatingCont="//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[@class='base-container hidden-xs']/div[@class='outer-container']/div[@class='body-container']/div[@class='floating-bar']/div[@class='grid-container']/div[1]/a[1]";
+		private String sendButnCont= "//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[1]";
+		private String floatingCont="//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[@class='base-container hidden-xs']/div[@class='outer-container']/div[@class='body-container']/div[@class='floating-bar']/div[@class='grid-container']/div[1]";
 		private String sendButn ="//body/app-root/div[@class='main-content portal page-wrapper']/app-floating-bar/div[@class='base-container hidden-xs']/div[@class='outer-container']/div[@class='body-container']/div[@class='floating-bar']/div[@class='grid-container']/div[1]/a[1]";
-		//private String parcelSubMenu="//a[@class='title ng-star-inserted'][normalize-space()='Send']";
+		private String alertbox2 ="//html/body/div[3]/div[2]/div";//"//*[@id='P_1721614184896']";
+		private String closeAlertBox2Locator= "/html/body/div[3]/div[2]/div/div[1]/button";
+		//private String createShipmentcontainer="//body[1]/app-root[1]/div[1]/div[2]/div[1]/div[1]/app-static-layout[1]/app-send-parcel[1]/div[1]/div[1]/div[3]/div[1]/div[2]/div[1]/div[2]/div[5]";
+		private String createShipmentLocator = "//div[contains(text(),'Create Shipment Now')]";
+		
 		/**
 		 * Constructor of the page. Initialize the Page Factory objects.
 		 * 
@@ -98,38 +107,55 @@ public class GoogleHomePage extends PageBase{
 		public void navigateBack() {
 		driver.navigate().back();
 		}
-		@Test 
 		public void testMenuClick() {
 			try {
-	//		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			driver.get("https://www.pos.com.my/");
-			searchFor();
-			//driver.navigate().back();
-			/*// Debugging information
-			System.out.println("Expected URL: " + expectedUrl);
-			System.out.println("Actual URL: " + actualUrl);
-			Assert.assertEquals(actualUrl, expectedUrl, "The URL of the new tab is incorrect.");*/
 
-			//System.out.println("Test Passed: The URL is correct.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-			WebElement basefloatingContainer = SeleniumUtils.findElement(driver, basefloatingCont);
+				 // Switch to the new tab and verify the URL
+		        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+		        driver.switchTo().window(tabs.get(0));
+		    	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			
+
+			WebElement basefloatingContainer = SeleniumUtils.findElement(driver, sendButnCont);
 			basefloatingContainer.findElement(By.xpath(sendButn)).click();
+		    
+			// Check if the alert box element is displayed
+	            if (utils.SeleniumUtils.isElementDisplayed(driver, alertbox2)) {
+	                System.out.println("Alert box 2 is displayed.");
+	                // Locate and click the close button
+	                WebElement closeAlertBox2Button = driver.findElement(By.xpath(closeAlertBox2Locator));
+	                closeAlertBox2Button.click();
+	                System.out.println("Clicked the close button for alert box 2.");
+	            } else {
+	                System.out.println("Alert box 2 is not displayed.");
+	            }
+			
+
+	            // Scroll to and click the createShipment button
+	            utils.SeleniumUtils.scrollToElementAndClick(driver, createShipmentLocator,20).click();
+
+	    
+		      
+		      
 			//SeleniumUtils.findElement(driver, floatingCont).click();;
 			// Find the "Send" menu item and click it
-			 SeleniumUtils.waitForElementToBeClickable(driver,sendButn).click();
-			//SeleniumUtils.waitForElement(driver, sendButn).click();
-	 			 
-			// Find the "Parcel" submenu item and click it
-			
-			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			//SeleniumUtils.waitForElement(driver, parcelSubMenu).click();
-			
-			return;
+		//	 SeleniumUtils.waitForElementToBeClickable(driver,floatingCont).click();
+			 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			 
+			}
+			 catch (Exception e) {
+				// TODO: handle exception
+			}
+			 
+		return;
 		}
+}
+
+		
+
+
 	
 
 
 
-}
+
