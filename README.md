@@ -1,11 +1,9 @@
 # PosAppMy
 
-posAppMy is a Home Test Automation Assessment:. This project is built using Maven and provides Useing automation tools Selenium and java to create a test
-automation using TestNg for reporting.
+PosAppMy is a test automation assessment project built with Maven. It leverages Selenium and Java to create test automation scripts, using TestNG for reporting.
 
 ## Table of Contents
 
-- 
 - [Installation](#installation)
 :- [Usage](#usage):eclipse IDE
 - [Running Tests](#running-tests): run or debug the file GoogleSearchTests.java
